@@ -12,13 +12,20 @@
     <header>
         <div class="logo">
             <img
-                src="/assets/newspaper.png">
+                src="https://media.istockphoto.com/id/187925868/vector/newspaper-cover-page.jpg?s=612x612&w=0&k=20&c=SantJnFi_0dCOD_HUXgRSJxagvgL7Wp_F_e-rFSUV_E=">
             <h1>GenuineNews</h1>
         </div>
-        <div class="auth-buttons">
-            <button class=" register">Register</button>
-            <button class=" login">Login</button>
+        <div class="user-menu">
+            <div class="profile-icon" onclick="toggleDropdown()">
+                <img src="/assets/userlogo.png" alt="User" />
+            </div>  
+            <div id="dropdown" class="dropdown-menu">
+                <a href="#">Profile</a>
+                <a href="#">Settings</a>
+                <a href="#">Logout</a>
+            </div>
         </div>
+
     </header>
 
     <nav class="navbar">
@@ -38,8 +45,8 @@
             <div id="main-news">
                 <div class="main-news"></div>
                 <span>
-                <div class="side-news"></div>
-                <div class="side-news"></div>
+                    <div class="side-news"></div>
+                    <div class="side-news"></div>
                 </span>
             </div>
 

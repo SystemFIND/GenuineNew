@@ -41,6 +41,50 @@ header {
   cursor: pointer;
 }
 
+.user-menu {
+ position:relative;
+ right: 10%;
+ margin-bottom: 10px;
+}
+
+.profile-icon {
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+}
+
+.profile-icon img {
+  width: 150%;
+  height: 150%;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background-color: #eee;
+  padding: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  min-width: 120px;
+  z-index: 100;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #222;
+  font-family: "Georgia", serif;
+  transition: background-color 0.2s;
+}
+
+.dropdown-menu a:hover {
+  background-color: #ddd;
+}
+
+
 .navbar {
   display: flex;
   align-items: center;
