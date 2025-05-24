@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();            
             $table->string('author');
-            $table->string('category');
+            $table->enum('category', ['politik', 'ekonomi', 'teknologi', 'olahraga', 'hiburan']);
             $table->string('description');
             $table->string('thumbnail');
             $table->text('content');
