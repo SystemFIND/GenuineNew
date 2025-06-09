@@ -36,21 +36,29 @@ export default function Navbar() {
               onClick={() => setDropdown((v) => !v)}
             />
             {dropdown && (
-              <div className="absolute right-0 mt-2 w-36 bg-white border rounded shadow z-50">
-                <Link href="/profile" className="block px-4 py-2 hover:bg-gray-100">Profile</Link>
-                <Link href="/settings" className="block px-4 py-2 hover:bg-gray-100">Settings</Link>
-                <form method="POST" action="/logout">
-                  <input type="hidden" name="_token" value={csrf_token} />
-                  <Button
-                    type="submit"
-                    variant="ghost"
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                  >
-                    Logout
-                  </Button>
-                </form>
+            <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow z-50 text-left">
+              <div className="px-4 py-2 font-semibold text-[#1a2233]">
+                {auth.user.first_name} {auth.user.last_name}
               </div>
-            )}
+              <Link href="/profile" className="block px-4 py-2 hover:bg-gray-100">Profile</Link>
+
+              {/* Tampilkan Dashboard hanya jika admin */}
+              {auth.user.role === 'admin' && (
+                <Link href="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100">Dashboard</Link>
+              )}
+
+              <Link href="/settings" className="block px-4 py-2 hover:bg-gray-100">Settings</Link>
+              <form method="POST" action="/logout">
+                <input type="hidden" name="_token" value={csrf_token} />
+                <button
+                  type="submit"
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+                >
+                  Logout
+                </button>
+              </form>
+            </div>
+          )}
           </div>
         )}
       </div>

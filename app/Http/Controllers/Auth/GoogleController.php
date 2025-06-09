@@ -30,10 +30,12 @@ class GoogleController extends Controller
 
         Auth::login($user, true);
 
+        session()->regenerate();
+
         // Redirect sesuai role
         if ($user->role === 'admin') {
             return redirect('/admin/dashboard');
         }
-        return redirect('/dashboard');
+        return redirect('/');
     }
 }

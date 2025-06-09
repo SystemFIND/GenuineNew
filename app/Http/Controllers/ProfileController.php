@@ -2,62 +2,92 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Menampilkan halaman edit profil.
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+        return Inertia::render('Profile', [
+            'user' => $request->user(),
+            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail
+                && ! $request->user()->hasVerifiedEmail(),
             'status' => session('status'),
         ]);
     }
 
     /**
-     * Update the user's profile information.
+     * Memperbarui profil pengguna.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit');
-    }
-
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'password' => ['required', 'current_password'],
+        $validated = $request->validate([
+            'first_name'    => 'required|string|max:255',
+            'last_name'     => 'nullable|string|max:255',
+            'email'         => 'required|email|max:255',
+            'bio'           => 'nullable|string|max:500',
+            'gender'        => 'nullable|in:male,female,other',
+            'birth_date'    => 'nullable|date',
+            'phone_number'  => 'nullable|string|max:20',
+            'city'          => 'nullable|string|max:255',
+            'state'         => 'nullable|string|max:255',
+            'avatar'        => 'nullable|image|max:2048',
         ]);
 
         $user = $request->user();
 
-        Auth::logout();
+        // Jika ada avatar baru
+        if ($request->hasFile('avatar')) {
+            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
 
-        $user->delete();
+        // Reset verifikasi email jika email berubah
+        if ($user->email !== $validated['email']) {
+            $user->email_verified_at = null;
+        }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $user->update($validated);
 
-        return Redirect::to('/');
+        return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui.');
+    }
+
+    /**
+     * Update password pengguna.
+     */
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = $request->user();
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('profile.edit')->with('success', 'Password berhasil diubah.');
+    }
+
+    /**
+     * Kirim ulang email verifikasi.
+     */
+    public function sendVerification(Request $request)
+    {
+        if ($request->user() instanceof MustVerifyEmail && ! $request->user()->hasVerifiedEmail()) {
+            $request->user()->sendEmailVerificationNotification();
+        }
+
+        return back()->with('success', 'Email verifikasi berhasil dikirim ulang.');
     }
 }
