@@ -1,18 +1,50 @@
 import React, { useState } from "react";
+import { usePage } from "@inertiajs/react";
 
 export default function FeedbackForm() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const { auth, csrf_token } = usePage().props;
+
+  const isLoggedIn = auth && auth.user;
+  const [form, setForm] = useState({
+    name: isLoggedIn ? auth.user.name : "",
+    email: isLoggedIn ? auth.user.email : "",
+    message: "",
+  });
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Kirim feedback ke backend di sini (AJAX/axios/fetch)
-    setSubmitted(true);
-    setForm({ name: "", email: "", message: "" });
+
+    try {
+      const response = await fetch("/feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrf_token,
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setForm({
+          name: isLoggedIn ? auth.user.name : "",
+          email: isLoggedIn ? auth.user.email : "",
+          message: "",
+        });
+      } else {
+        const errorData = await response.json();
+        console.error("Gagal mengirim:", errorData);
+        alert("Gagal mengirim feedback.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Terjadi kesalahan saat mengirim feedback.");
+    }
   };
 
   return (
@@ -27,36 +59,40 @@ export default function FeedbackForm() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="name">
-              Nama
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              className="w-full border rounded px-3 py-2 text-sm"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Nama Anda"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="email">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              className="w-full border rounded px-3 py-2 text-sm"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Email Anda"
-              required
-            />
-          </div>
+          {!isLoggedIn && (
+            <>
+              <div>
+                <label className="block text-sm font-medium mb-1" htmlFor="name">
+                  Nama
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  className="w-full border rounded px-3 py-2 text-sm"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Nama Anda"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1" htmlFor="email">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="w-full border rounded px-3 py-2 text-sm"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="Email Anda"
+                  required
+                />
+              </div>
+            </>
+          )}
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="message">
               Pesan / Kritik / Saran

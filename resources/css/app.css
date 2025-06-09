@@ -66,3 +66,9 @@
     @apply bg-white;
   }
 }
+
+@layer components {
+  .input {
+    @apply w-full px-2 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+}

@@ -16,13 +16,13 @@ class UserSeeder extends Seeder
 
         \App\Models\User::create([
         'first_name'        => 'Admin',
-        'last_name'         => 'User',
+        'last_name'         => 'Ganteng',
         'email'             => 'admin@GenuineNews.com',
         'email_verified_at' => now(),
         'password'          => Hash::make('adminadmin'), // password
         'role'              => 'admin',
         'avatar'            => null,
-        'bio'               => 'Administrator account',
+        'bio'               => 'Administrator Account',
         'gender'            => 'male',
         'Birth_date'        => '1990-01-01',
         'phone_number'      => '08123456789',
