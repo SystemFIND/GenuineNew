@@ -2,32 +2,32 @@ import { router } from "@inertiajs/react";
 
 export default function UserTable({ users }) {
   return (
-    <div className="p-6">
+    <div className="p-6 text-gray-800 dark:text-gray-100">
       <h2 className="text-xl font-bold mb-4">Daftar Semua User</h2>
-      <table className="min-w-full border">
-        <thead>
+      <table className="min-w-full border border-gray-300 dark:border-gray-600">
+        <thead className="bg-gray-100 dark:bg-gray-700">
           <tr>
-            <th className="border px-4 py-2">ID</th>
-            <th className="border px-4 py-2">First Name</th>
-            <th className="border px-4 py-2">Last Name</th>
-            <th className="border px-4 py-2">Email</th>
-            <th className="border px-4 py-2">Role</th>
-            <th className="border px-4 py-2">Edit</th>
-            <th className="border px-4 py-2">Delete</th>
+            <th className="border border-gray-300 dark:border-gray-600 px-4 py-2">ID</th>
+            <th className="border border-gray-300 dark:border-gray-600 px-4 py-2">First Name</th>
+            <th className="border border-gray-300 dark:border-gray-600 px-4 py-2">Last Name</th>
+            <th className="border border-gray-300 dark:border-gray-600 px-4 py-2">Email</th>
+            <th className="border border-gray-300 dark:border-gray-600 px-4 py-2">Role</th>
+            <th className="border border-gray-300 dark:border-gray-600 px-4 py-2">Edit</th>
+            <th className="border border-gray-300 dark:border-gray-600 px-4 py-2">Delete</th>
           </tr>
         </thead>
         <tbody>
           {users.data.map(user => (
-            <tr key={user.id}>
-              <td className="border px-4 py-2">{user.id}</td>
-              <td className="border px-4 py-2">{user.first_name}</td>
-              <td className="border px-4 py-2">{user.last_name}</td>
-              <td className="border px-4 py-2">{user.email}</td>
-              <td className="border px-4 py-2">{user.role}</td>
-              <td className="border px-4 py-2">
-                <a href={route('admin.users.edit', user.id)} className="text-blue-600 hover:underline">Edit</a>
+            <tr key={user.id} className="bg-white dark:bg-gray-800">
+              <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">{user.id}</td>
+              <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">{user.first_name}</td>
+              <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">{user.last_name}</td>
+              <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">{user.email}</td>
+              <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">{user.role}</td>
+              <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">
+                <a href={route('admin.users.edit', user.id)} className="text-blue-600 dark:text-blue-400 hover:underline">Edit</a>
               </td>
-              <td className="border px-4 py-2">
+              <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">
                 <button
                   onClick={() => {
                     if (confirm("Yakin hapus user ini?")) {
@@ -50,7 +50,11 @@ export default function UserTable({ users }) {
           <button
             key={idx}
             disabled={!link.url}
-            className={`px-3 py-1 rounded ${link.active ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+            className={`px-3 py-1 rounded border border-gray-300 dark:border-gray-600 ${
+              link.active
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 dark:bg-gray-700 dark:text-gray-100"
+            }`}
             onClick={() => {
               if (link.url) {
                 const url = new URL(window.location.href);

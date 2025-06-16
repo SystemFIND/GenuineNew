@@ -36,9 +36,17 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user() ? array_merge(
                     $request->user()->toArray(),
-                    ['name' => trim($request->user()->first_name . ' ' . $request->user()->last_name)]
+                    [
+                        'name' => trim($request->user()->first_name . ' ' . $request->user()->last_name),
+                        'dark_mode' => optional($request->user()->setting)->dark_mode ?? false, // ✅ Tambahkan ini
+                    ]
                 ) : null,
             ],
+
+            // Pastikan settings itu sebuah array, kalau null kasih array kosong
+            'settings' => $request->user() && $request->user()->setting
+                ? $request->user()->setting->toArray()
+                : ['dark_mode' => false],  // default false kalau belum ada
 
             'csrf_token' => csrf_token(),
 

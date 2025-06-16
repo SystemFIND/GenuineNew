@@ -7,12 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class UserSetting extends Model
 {
     protected $fillable = [
-        'user_id',
-        'dark_mode',
-        'timezone',
-        'date_format',
-        'time_format',
-        'push_notification',
+        'user_id', 'push_notifications', 'dark_mode', 'timezone',
+        'date_format', 'time_format', 'language',
     ];
 
     public function user()

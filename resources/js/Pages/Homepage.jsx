@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Head } from "@inertiajs/react";
+import React, { useState, useEffect } from "react";
+import { Link, Head, usePage } from "@inertiajs/react";
 import NewsLists from "@/Components/Homepage/NewsLists";
 import Navbar from "@/Components/Homepage/Navbar";
 import FeedbackButton from "@/Components/Homepage/FeedbackButton";
@@ -12,19 +12,30 @@ export default function Homepage(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
 
+  const { props: pageProps } = usePage();
+  const settings = pageProps.auth?.user?.settings;
+
+  useEffect(() => {
+    if (settings?.dark_mode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [settings]);
+
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
+    <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900 dark:text-gray-100">
       <Head title="Homepage" />
 
       <Navbar />
 
       {/* Category Tabs & Search Bar */}
-      <div className="sticky top-0 z-30 bg-white shadow">
+      <div className="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow">
         <div className="flex flex-wrap items-center justify-between px-4 sm:px-10 py-3 overflow-x-auto">
           <CategoryTabs />
           <SearchBar />
