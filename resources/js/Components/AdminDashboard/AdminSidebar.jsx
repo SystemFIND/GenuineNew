@@ -2,17 +2,27 @@ import React from "react";
 
 export default function AdminSidebar({ activeTab, setActiveTab }) {
   return (
-    <aside className="w-60 min-w-[180px] bg-[#222] text-white rounded-lg shadow flex flex-col p-6 mr-2">
-      <h2 className="text-2xl font-bold mb-6 border-b border-gray-400 pb-2">Admin Dashboard</h2>
+    <aside className="w-60 min-w-[180px] bg-gray-200 text-gray-900 dark:bg-[#222] dark:text-white rounded-lg shadow flex flex-col p-6 mr-2 transition-colors duration-300">
+      <h2 className="text-2xl font-bold mb-6 border-b border-gray-400 dark:border-gray-600 pb-2">
+        Admin Dashboard
+      </h2>
       <nav className="flex flex-col gap-4 flex-1">
         <button
-          className={`text-lg font-semibold text-left transition ${activeTab === "users" ? "text-blue-400" : "hover:text-blue-300"}`}
+          className={`text-lg font-semibold text-left transition ${
+            activeTab === "users"
+              ? "text-blue-600 dark:text-blue-400"
+              : "hover:text-blue-500 dark:hover:text-blue-300"
+          }`}
           onClick={() => setActiveTab("users")}
         >
           Users
         </button>
         <button
-          className={`text-lg font-semibold text-left transition ${activeTab === "articles" ? "text-blue-400" : "hover:text-blue-300"}`}
+          className={`text-lg font-semibold text-left transition ${
+            activeTab === "articles"
+              ? "text-blue-600 dark:text-blue-400"
+              : "hover:text-blue-500 dark:hover:text-blue-300"
+          }`}
           onClick={() => setActiveTab("articles")}
         >
           Articles

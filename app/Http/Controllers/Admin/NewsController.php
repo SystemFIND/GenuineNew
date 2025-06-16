@@ -8,31 +8,24 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\NewNewsNotification;
+use App\Models\User;
 
 class NewsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return Inertia::render('Homepage');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-         $validated = $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'required|in:politik,ekonomi,teknologi,olahraga,hiburan',
             'description' => 'required|string|max:255',
@@ -43,7 +36,7 @@ class NewsController extends Controller
 
         $thumbnailPath = $request->file('thumbnail')->store('thumbnails', 'public');
 
-        News::create([
+        $news = News::create([
             'title' => $validated['title'],
             'slug' => Str::slug($validated['title']),
             'author' => auth()->user()->first_name . ' ' . auth()->user()->last_name,
@@ -55,36 +48,36 @@ class NewsController extends Controller
             'published_at' => $validated['status'] === 'published' ? now() : null,
         ]);
 
+        // Kirim notifikasi hanya jika status published
+        if ($validated['status'] === 'published') {
+            // Cari user yang punya push_notifications = true
+            $usersToNotify = User::whereHas('setting', function ($query) {
+                $query->where('push_notifications', true);
+            })->get();
+
+            foreach ($usersToNotify as $user) {
+                $user->notify(new NewNewsNotification($news));
+            }
+        }
+
         return redirect()->route('admin.dashboard')->with('success', 'Berita berhasil disimpan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(news $news)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(news $news)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, news $news)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(news $news)
     {
         //

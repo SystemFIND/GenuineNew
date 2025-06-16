@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\UserSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,10 +15,8 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        $settings = $user->setting;
-
-        return inertia('Settings/Index', [
+        $settings = Auth::user()->setting;
+        return Inertia::render('Settings/Index', [
             'settings' => $settings,
         ]);
     }
@@ -51,8 +50,9 @@ class SettingsController extends Controller
      */
     public function edit(UserSetting $userSetting)
     {
-        $settings = Auth::user()->settings;
-        return inertia('Settings/Edit', [
+        $settings = Auth::user()->setting;
+
+        return inertia('Settings', [
             'settings' => $settings
         ]);
     }
@@ -60,20 +60,30 @@ class SettingsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserSetting $userSetting)
+    public function update(Request $request)
     {
-       $validated = $request->validate([
-            'dark_mode' => 'boolean',
-            'timezone' => 'string',
-            'date_format' => 'string',
-            'time_format' => 'string',
-            'push_notification' => 'boolean',
+        $data = $request->validate([
+            'pushNotifications' => 'required|boolean',
+            'darkMode' => 'required|boolean',
+            'timezone' => 'required|string',
+            'dateFormat' => 'required|string',
+            'timeFormat' => 'required|string',
+            'language' => 'required|string|in:en,id,fr',
         ]);
 
-        $setting = Auth::user()->settings;
-        $setting->update($validated);
+        Auth::user()->setting()->updateOrCreate(
+            ['user_id' => Auth::id()],
+            [
+                'push_notifications' => $data['pushNotifications'],
+                'dark_mode' => $data['darkMode'],
+                'timezone' => $data['timezone'],
+                'date_format' => $data['dateFormat'],
+                'time_format' => $data['timeFormat'],
+                'language' => $data['language'],
+            ]
+        );
 
-        return redirect()->back()->with('success', 'Settings updated.');
+        return redirect()->back()->with('success', 'Settings updated!');
     }
 
     /**

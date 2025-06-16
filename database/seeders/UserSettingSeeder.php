@@ -25,7 +25,7 @@ class UserSettingSeeder extends Seeder
                     'timezone' => 'Asia/Jakarta',
                     'date_format' => 'Y-m-d',
                     'time_format' => 'H:i',
-                    'push_notification' => true,
+                    'push_notifications' => true,
                 ]);
             }
         }

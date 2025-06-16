@@ -18,7 +18,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
           <Menu className="w-6 h-6" />
         </button>
         <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-          Admin Dashboard
+          Journalist Dashboard
         </h1>
       </div>
 
@@ -28,13 +28,11 @@ export default function Navbar({ activeTab, setActiveTab }) {
           onClick={() => setDropdown((v) => !v)}
           className="relative w-10 h-10 mr-14 cursor-pointer"
         >
-          {/* Logo untuk light mode */}
           <img
             src="/images/user.png"
             alt="User"
             className="block dark:hidden w-10 h-10 rounded-full border border-white shadow"
           />
-          {/* Logo untuk dark mode */}
           <img
             src="/images/user-dark.png"
             alt="User Dark"
@@ -49,8 +47,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
             <Link href="/profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
               Profile
             </Link>
-            {auth.user.role === "admin" && (
-              <Link href="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+            {auth.user.role === "journalist" && (
+              <Link href="/journalist/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
                 Dashboard
               </Link>
             )}

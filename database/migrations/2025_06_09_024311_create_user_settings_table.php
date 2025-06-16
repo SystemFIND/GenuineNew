@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean('dark_mode')->default(false);
-            $table->string('timezone')->default('UTC');
+            $table->string('timezone')->default('Asia/Jakarta');
             $table->string('date_format')->default('Y-m-d');
             $table->string('time_format')->default('H:i');
-            $table->boolean('push_notification')->default(true);
+            $table->string('language')->default('en');
+            $table->boolean('push_notifications')->default(true);
             $table->timestamps();
         });
     }

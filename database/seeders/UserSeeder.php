@@ -31,6 +31,24 @@ class UserSeeder extends Seeder
         'remember_token'    => \Illuminate\Support\Str::random(10),
     ]);
 
+    // Journalist account
+        User::create([
+            'first_name'        => 'Jurnalis',
+            'last_name'         => 'Hebat',
+            'email'             => 'journalist@GenuineNews.com',
+            'email_verified_at' => now(),
+            'password'          => Hash::make('journalist123'),
+            'role'              => 'journalist',
+            'avatar'            => null,
+            'bio'               => 'Jurnalis Profesional',
+            'gender'            => 'female',
+            'Birth_date'        => '1995-05-15',
+            'phone_number'      => '08129876543',
+            'city'              => 'Bandung',
+            'state'             => 'Jawa Barat',
+            'remember_token'    => \Illuminate\Support\Str::random(10),
+        ]);
+
         User::factory()->count(10)->create([
             'role' => 'user', // Default role for seeded users
         ]);

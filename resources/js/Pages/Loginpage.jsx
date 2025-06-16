@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthCard from '@/Components/Loginpage/AuthCard';
 import AuthLogo from '@/Components/Loginpage/AuthLogo';
 import Input from '@/Components/Loginpage/Input';
@@ -6,7 +6,7 @@ import Label from '@/Components/Loginpage/Label';
 import Button from '@/Components/Loginpage/Button';
 import Divider from '@/Components/Loginpage/Divider';
 import GoogleButton from '@/Components/Loginpage/GoogleButton';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 
 export default function Loginpage() {
     const { data, setData, post, processing, errors } = useForm({
@@ -14,21 +14,39 @@ export default function Loginpage() {
         password: '',
     });
 
+    // Ambil settings dari auth user (bisa kosong kalau belum login)
+    const { props } = usePage();
+    const settings = props.auth?.user?.settings;
+
+    useEffect(() => {
+        if (settings?.dark_mode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [settings]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         post('/login');
     };
 
+    // Style dinamis berdasarkan dark mode
+    const backgroundColor = settings?.dark_mode ? '#1a1a1a' : '#8c8c8c';
+    const textColor = settings?.dark_mode ? '#eee' : '#333';
+    const linkColor = settings?.dark_mode ? '#66aaff' : '#2d72d9';
+
     return (
         <div
             style={{
                 minHeight: '100vh',
-                background: '#8c8c8c',
+                background: backgroundColor,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: 16,
-                position: 'relative'
+                position: 'relative',
+                color: textColor,
             }}
         >
             {/* Tombol Back di pojok kiri atas */}
@@ -38,14 +56,14 @@ export default function Loginpage() {
                     position: 'absolute',
                     top: 24,
                     left: 24,
-                    background: '#e0e0e0',
-                    color: '#333',
+                    background: settings?.dark_mode ? '#333' : '#e0e0e0',
+                    color: textColor,
                     border: 'none',
                     borderRadius: 5,
                     padding: '8px 20px',
                     fontWeight: 500,
                     cursor: 'pointer',
-                    zIndex: 10
+                    zIndex: 10,
                 }}
                 onClick={() => window.location.href = '/'}
             >
@@ -80,12 +98,27 @@ export default function Loginpage() {
                             />
                             {errors.password && <div style={{ color: 'red', fontSize: 12 }}>{errors.password}</div>}
                             <div style={{ textAlign: 'right', fontSize: 12 }}>
-                                <a href="#" style={{ color: '#444', textDecoration: 'none' }}>Forgot Password ?</a>
+                                <a href="#" style={{ color: linkColor, textDecoration: 'none' }}>Forgot Password ?</a>
                             </div>
                         </div>
-                        <Button style={{ marginTop: 15, width: '100%', background: '#2d72d9', color: '#fff', fontWeight: 600, border: 'none', borderRadius: 5, padding: '12px 0', fontSize: 16, cursor: 'pointer' }}>Login</Button>
+                        <Button
+                            style={{
+                                marginTop: 15,
+                                width: '100%',
+                                background: '#2d72d9',
+                                color: '#fff',
+                                fontWeight: 600,
+                                border: 'none',
+                                borderRadius: 5,
+                                padding: '12px 0',
+                                fontSize: 16,
+                                cursor: 'pointer',
+                            }}
+                        >
+                            Login
+                        </Button>
                         <div style={{ fontSize: 12, marginTop: 5 }}>
-                            Not signed up yet? <a href="/register" style={{ color: '#2d72d9' }}>Register Here</a>
+                            Not signed up yet? <a href="/register" style={{ color: linkColor }}>Register Here</a>
                         </div>
                         <Divider text="OR" />
                         <GoogleButton />

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\FeedbackController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\Admin\NewsController as JournalistNewsController;
 use App\Http\Controllers\SettingsController;
 use Inertia\Inertia;
 
@@ -102,9 +103,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
+    Route::get('/settings', [SettingsController::class, 'edit'])->name('settings');
     Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
 });
 
+Route::middleware(['auth', 'journalist'])->prefix('journalist')->name('journalist.')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('JournalistDashboard', [
+            'articles' => \App\Models\News::where('author_id', auth()->id())->paginate(10),
+        ]);
+    })->name('dashboard');
+
+    Route::post('/news', [JournalistNewsController::class, 'store'])->name('news.store');
+});
 
 require __DIR__.'/auth.php';
