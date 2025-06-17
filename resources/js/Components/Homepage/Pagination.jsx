@@ -1,42 +1,27 @@
 import React from "react";
+import { Link } from "@inertiajs/react";
 
-export default function Pagination({ currentPage, totalPages, onPageChange }) {
-  if (totalPages <= 1) return null;
-
-  const pages = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push(i);
+// Terima prop 'links' dari paginator Laravel
+export default function Pagination({ links }) {
+  if (!links || links.length <= 3) {
+    return null; // Jangan tampilkan paginasi jika hanya ada 1 halaman
   }
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-6">
-      <button
-        className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        Prev
-      </button>
-      {pages.map((page) => (
-        <button
-          key={page}
-          className={`px-3 py-1 rounded ${
-            page === currentPage
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
-          }`}
-          onClick={() => onPageChange(page)}
-        >
-          {page}
-        </button>
+    <nav className="flex justify-center items-center gap-2 mt-8">
+      {links.map((link, index) => (
+        <Link
+          key={index}
+          href={link.url || '#'}
+          as={link.url ? 'a' : 'span'}
+          className={`
+            px-4 py-2 text-sm font-medium rounded-md transition
+            ${!link.url ? 'text-gray-400 bg-gray-200 dark:bg-gray-800 cursor-not-allowed' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}
+            ${link.active ? 'bg-blue-600 text-white font-bold shadow-md' : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600'}
+          `}
+          dangerouslySetInnerHTML={{ __html: link.label }}
+        />
       ))}
-      <button
-        className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        Next
-      </button>
-    </div>
+    </nav>
   );
 }

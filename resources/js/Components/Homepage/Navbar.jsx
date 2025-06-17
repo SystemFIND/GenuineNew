@@ -42,9 +42,12 @@ export default function Navbar() {
               </div>
               <Link href="/profile" className="block px-4 py-2 hover:bg-gray-100">Profile</Link>
 
-              {/* Tampilkan Dashboard hanya jika admin */}
+              {/* Tampilkan Dashboard hanya jika admin atau jurnalis */}
               {auth.user.role === 'admin' && (
-                <Link href="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100">Dashboard</Link>
+                <Link href="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100">Admin Dashboard</Link>
+              )}
+              {auth.user.role === 'journalist' && (
+                <Link href="/journalist/dashboard" className="block px-4 py-2 hover:bg-gray-100">Journalist Dashboard</Link>
               )}
 
               <Link href="/settings" className="block px-4 py-2 hover:bg-gray-100">Settings</Link>

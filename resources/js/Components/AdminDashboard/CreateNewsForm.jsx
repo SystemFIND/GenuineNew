@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 
-export default function CreateNewsForm() {
+// Terima prop baru bernama 'submitRoute'
+export default function CreateNewsForm({ submitRoute }) {
   const { data, setData, post, processing, errors, reset } = useForm({
     title: "",
     category: "",
@@ -25,14 +26,22 @@ export default function CreateNewsForm() {
 
   const handleSubmit = (status) => (e) => {
     e.preventDefault();
-    setData("status", status);
-    post(route("admin.news.store"), {
+    
+    // Gunakan data.status dari state form, bukan dari parameter
+    const postData = { ...data, status: status };
+
+    // Gunakan 'submitRoute' yang dikirim dari halaman dashboard
+    post(route(submitRoute), {
+      data: postData,
       onSuccess: () => reset(),
+      forceFormData: true, // Penting untuk file upload
     });
   };
 
   return (
-    <form onSubmit={handleSubmit("draft")} className="space-y-4">
+    // ... sisa kode form tidak berubah, hanya logika handleSubmit yang disesuaikan ...
+    <form onSubmit={handleSubmit(data.status)} className="space-y-4">
+      {/* ... semua input fields ... */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
           Judul
@@ -105,10 +114,10 @@ export default function CreateNewsForm() {
         />
         {errors.content && <p className="text-red-500 text-sm">{errors.content}</p>}
       </div>
-
       <div className="flex space-x-4">
+        {/* Tombol sekarang memanggil handleSubmit dengan status yang diinginkan */}
         <button
-          type="submit"
+          type="button"
           onClick={handleSubmit("draft")}
           disabled={processing}
           className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md transition"

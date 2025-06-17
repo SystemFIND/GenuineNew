@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();            
             $table->string('author');
+            $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
             $table->enum('category', ['politik', 'ekonomi', 'teknologi', 'olahraga', 'hiburan']);
             $table->string('description');
             $table->string('thumbnail');
@@ -25,6 +26,11 @@ return new class extends Migration
             $table->unsignedBigInteger('views')->default(0);
             $table->unsignedInteger('comments')->default(0);
             $table->timestamps();
+
+            // === PENAMBAHAN UNTUK OPTIMASI PERFORMA ===
+            // Membuat 'index' pada kolom author_id agar pencarian artikel
+            // berdasarkan penulis menjadi sangat cepat.
+            $table->index('author_id');
         });
     }
 

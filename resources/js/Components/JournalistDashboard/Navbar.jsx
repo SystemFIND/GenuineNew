@@ -47,9 +47,15 @@ export default function Navbar({ activeTab, setActiveTab }) {
             <Link href="/profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
               Profile
             </Link>
+            {/* Tampilkan Dashboard hanya jika admin atau jurnalis */}
+            {auth.user.role === "admin" && (
+              <Link href="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Admin Dashboard
+              </Link>
+            )}
             {auth.user.role === "journalist" && (
               <Link href="/journalist/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                Dashboard
+                Journalist Dashboard
               </Link>
             )}
             <Link href="/settings" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -79,19 +85,11 @@ export default function Navbar({ activeTab, setActiveTab }) {
           </button>
           <button
             className={`px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 ${
-              activeTab === "users" ? "font-bold text-blue-600 dark:text-blue-400" : ""
-            }`}
-            onClick={() => setActiveTab("users")}
-          >
-            Users
-          </button>
-          <button
-            className={`px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 ${
               activeTab === "create" ? "font-bold text-blue-600 dark:text-blue-400" : ""
             }`}
             onClick={() => setActiveTab("create")}
           >
-            Create
+            Create News
           </button>
           <button
             className={`px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 ${
