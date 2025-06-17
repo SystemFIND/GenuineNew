@@ -46,7 +46,10 @@ export default function AdminDashboard({ users, articles }) {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 min-h-[60vh] transition-colors duration-300">
           {activeTab === "users" && <UserTable users={users} />}
           {activeTab === "articles" && <ArticleTable articles={articles} />}
-          {activeTab === "create" && <CreateNewsForm />}
+          
+          {/* === TAMBAHKAN PROP DI BARIS INI === */}
+          {activeTab === "create" && <CreateNewsForm submitRoute="admin.news.store" />}
+          
         </div>
       </main>
       <Footer />

@@ -40,6 +40,7 @@ class NewsController extends Controller
             'title' => $validated['title'],
             'slug' => Str::slug($validated['title']),
             'author' => auth()->user()->first_name . ' ' . auth()->user()->last_name,
+            'author_id' => auth()->id(),
             'category' => $validated['category'],
             'description' => $validated['description'],
             'thumbnail' => $thumbnailPath,

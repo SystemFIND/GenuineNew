@@ -10,7 +10,8 @@ export default function JournalistDashboard({ articles }) {
   const settings = props.auth?.user?.settings;
 
   const searchParams = new URLSearchParams(window.location.search);
-  const initialTab = searchParams.get("tab") || "home";
+  // Default tab bisa disesuaikan, 'articles' atau 'create' adalah pilihan yang bagus
+  const initialTab = searchParams.get("tab") || "articles"; 
   const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
@@ -39,11 +40,14 @@ export default function JournalistDashboard({ articles }) {
     <div className="min-h-screen flex flex-col bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
       <Head title="Journalist Dashboard" />
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      {/* Struktur main content tidak perlu diubah */}
       <main className="flex-1 p-4 sm:px-6 lg:px-16">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 min-h-[60vh] transition-colors duration-300">
-          {activeTab === "home" && <p>Selamat datang di Dashboard Jurnalis</p>}
+          
+          {/* === TAMBAHKAN PROP DI BARIS INI === */}
+          {activeTab === "create" && <CreateNewsForm submitRoute="journalist.news.store" />}
+
           {activeTab === "articles" && <ArticleTable articles={articles} />}
-          {activeTab === "create" && <CreateNewsForm />}
         </div>
       </main>
       <Footer />

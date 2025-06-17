@@ -19,32 +19,41 @@ export default function ArticleTable({ articles }) {
           </tr>
         </thead>
         <tbody>
-          {articles.data.map((article) => (
-            <tr key={article.id} className="bg-white dark:bg-gray-800">
-              <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.id}</td>
-              <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.title}</td>
-              <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.category}</td>
-              <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.author}</td>
-              <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.date}</td>
-              <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.status}</td>
-              <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded transition">
-                  Edit
-                </button>
-              </td>
-              <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">
-                <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded transition">
-                  Delete
-                </button>
+          {/* UBAH BAGIAN INI: Tambahkan pengecekan */}
+          {articles && articles.data && articles.data.length > 0 ? (
+            articles.data.map((article) => (
+              <tr key={article.id} className="bg-white dark:bg-gray-800">
+                <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.id}</td>
+                <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.title}</td>
+                <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.category}</td>
+                <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.author}</td>
+                <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.date}</td>
+                <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">{article.status}</td>
+                <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">
+                  <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded transition">
+                    Edit
+                  </button>
+                </td>
+                <td className="border px-4 py-2 border-gray-300 dark:border-gray-600">
+                  <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded transition">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="8" className="text-center py-4 border px-4 border-gray-300 dark:border-gray-600">
+                No articles found.
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
       {/* Pagination */}
       <div className="flex justify-center gap-2 mt-4">
-        {articles.links &&
+        {articles && articles.links && // Tambahkan pengecekan di sini juga
           articles.links.map((link, idx) => (
             <button
               key={idx}

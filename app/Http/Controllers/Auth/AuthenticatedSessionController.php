@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
         if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
         } elseif ($user->role === 'journalist') {
-            return redirect()->route('journalist.dashboard');
+            return redirect()->route('journalist.dashboard', ['tab' => 'create']); // Redirect to 'create' tab
         }
         
         return redirect('/');
